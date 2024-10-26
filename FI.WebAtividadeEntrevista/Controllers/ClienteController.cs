@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using FI.AtividadeEntrevista.DML;
+using FI.WebAtividadeEntrevista.Service;
 
 namespace WebAtividadeEntrevista.Controllers
 {
@@ -36,26 +37,44 @@ namespace WebAtividadeEntrevista.Controllers
                 Response.StatusCode = 400;
                 return Json(string.Join(Environment.NewLine, erros));
             }
-            else
+            
+            var cpfFormatado = FormatadorService.FormataCpf(model.Cpf);
+
+            if (!FormatadorService.ValidaCPF(cpfFormatado))
             {
-                
-                model.Id = bo.Incluir(new Cliente()
-                {                    
-                    CEP = model.CEP,
-                    Cidade = model.Cidade,
-                    Email = model.Email,
-                    Estado = model.Estado,
-                    Logradouro = model.Logradouro,
-                    Nacionalidade = model.Nacionalidade,
-                    Nome = model.Nome,
-                    Sobrenome = model.Sobrenome,
-                    Telefone = model.Telefone,
-                    Cpf = model.Cpf
-                });
+                List<string> erro = new List<string>();
+                erro.Add("CPF inválido.");
+
+                Response.StatusCode = 400;
+                return Json(string.Join(Environment.NewLine, erro));
+            }
+
+            if (bo.VerificarExistencia(cpfFormatado))
+            {
+                List<string> erro = new List<string>();
+                erro.Add("CPF já cadastrado.");
+
+                Response.StatusCode = 400;
+                return Json(string.Join(Environment.NewLine, erro));
+            }
+
+            model.Id = bo.Incluir(new Cliente()
+            {                    
+                CEP = model.CEP,
+                Cidade = model.Cidade,
+                Email = model.Email,
+                Estado = model.Estado,
+                Logradouro = model.Logradouro,
+                Nacionalidade = model.Nacionalidade,
+                Nome = model.Nome,
+                Sobrenome = model.Sobrenome,
+                Telefone = model.Telefone,
+                Cpf = cpfFormatado
+            });
 
            
-                return Json("Cadastro efetuado com sucesso");
-            }
+            return Json("Cadastro efetuado com sucesso.");
+            
         }
 
         [HttpPost]
@@ -72,25 +91,34 @@ namespace WebAtividadeEntrevista.Controllers
                 Response.StatusCode = 400;
                 return Json(string.Join(Environment.NewLine, erros));
             }
-            else
+
+            var cpfFormatado = FormatadorService.FormataCpf(model.Cpf);
+
+            if (!FormatadorService.ValidaCPF(cpfFormatado))
             {
-                bo.Alterar(new Cliente()
-                {
-                    Id = model.Id,
-                    CEP = model.CEP,
-                    Cidade = model.Cidade,
-                    Email = model.Email,
-                    Estado = model.Estado,
-                    Logradouro = model.Logradouro,
-                    Nacionalidade = model.Nacionalidade,
-                    Nome = model.Nome,
-                    Sobrenome = model.Sobrenome,
-                    Telefone = model.Telefone,
-                    Cpf = model.Cpf
-                });
-                               
-                return Json("Cadastro alterado com sucesso");
+                List<string> erro = new List<string>();
+                erro.Add("CPF inválido.");
+
+                Response.StatusCode = 400;
+                return Json(string.Join(Environment.NewLine, erro));
             }
+
+            bo.Alterar(new Cliente()
+            {
+                Id = model.Id,
+                CEP = model.CEP,
+                Cidade = model.Cidade,
+                Email = model.Email,
+                Estado = model.Estado,
+                Logradouro = model.Logradouro,
+                Nacionalidade = model.Nacionalidade,
+                Nome = model.Nome,
+                Sobrenome = model.Sobrenome,
+                Telefone = model.Telefone,
+                Cpf = cpfFormatado
+            });
+                               
+            return Json("Cadastro alterado com sucesso");
         }
 
         [HttpGet]
@@ -99,6 +127,7 @@ namespace WebAtividadeEntrevista.Controllers
             BoCliente bo = new BoCliente();
             Cliente cliente = bo.Consultar(id);
             Models.ClienteModel model = null;
+            var cpfMascarado = FormatadorService.MascararCPF(cliente.Cpf);
 
             if (cliente != null)
             {
@@ -114,7 +143,7 @@ namespace WebAtividadeEntrevista.Controllers
                     Nome = cliente.Nome,
                     Sobrenome = cliente.Sobrenome,
                     Telefone = cliente.Telefone,
-                    Cpf = cliente.Cpf
+                    Cpf = cpfMascarado
                 };
 
             

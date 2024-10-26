@@ -31,8 +31,7 @@ $(document).ready(function () {
             }
         });
     })
-    $("#Cpf").on('keydown', function () {
-        console.log("Log")
+    $("#Cpf").on('keydown paste', function () {
         mascararCpf(this)
     });
 })
