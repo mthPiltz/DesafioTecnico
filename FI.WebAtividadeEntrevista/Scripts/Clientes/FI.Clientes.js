@@ -14,7 +14,8 @@ $(document).ready(function () {
                 "Estado": $(this).find("#Estado").val(),
                 "Cidade": $(this).find("#Cidade").val(),
                 "Logradouro": $(this).find("#Logradouro").val(),
-                "Telefone": $(this).find("#Telefone").val()
+                "Telefone": $(this).find("#Telefone").val(),
+                "Cpf": $(this).find("#Cpf").val()
             },
             error:
             function (r) {
@@ -30,7 +31,10 @@ $(document).ready(function () {
             }
         });
     })
-    
+    $("#Cpf").on('keydown', function () {
+        console.log("Log")
+        mascararCpf(this)
+    });
 })
 
 function ModalDialog(titulo, texto) {
@@ -56,3 +60,21 @@ function ModalDialog(titulo, texto) {
     $('body').append(texto);
     $('#' + random).modal('show');
 }
+
+function mascararCpf(campo) {
+    let valor = campo.value.replace(/\D/g, '');
+
+    if (valor.length > 11) {
+        valor = valor.slice(0, 11);
+    }
+
+    if (valor.length <= 3) {
+        campo.value = valor;
+    } else if (valor.length <= 6) {
+        campo.value = valor.slice(0, 3) + '.' + valor.slice(3);
+    } else if (valor.length <= 9) {
+        campo.value = valor.slice(0, 3) + '.' + valor.slice(3, 6) + '.' + valor.slice(6);
+    } else {
+        campo.value = valor.slice(0, 3) + '.' + valor.slice(3, 6) + '.' + valor.slice(6, 9) + '-' + valor.slice(9);
+    }
+}  
