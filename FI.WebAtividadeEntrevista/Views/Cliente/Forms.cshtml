@@ -87,17 +87,19 @@
             </div>
         </div>
     </div>
+</form>
 
-    <div class="modal" id="modalBeneficiarios" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="background: #00000069;">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Beneficiários</h5>
-                    <button type="button" id="btnFecharModal" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
+<div class="modal" id="modalBeneficiarios" tabindex="-1" role="dialog" style="background: #00000069;">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Beneficiários</h5>
+                <button type="button" id="btnFecharModal" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="formBeneficiarios">
                     <div class="row" style="display: flex">
                         <div class="col-md-5">
                             <label for="CpfBeneficiario">CPF:</label>
@@ -109,40 +111,40 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-md-5">
-                            <input required="required" type="text" class="form-control" id="CpfBeneficiario" name="ficiario" placeholder="Ex. 000.000.000-00" maxlength="14" />
-                        </div>
-                        <div class="col-md-5">
-                            <input required="required" type="text" class="form-control" id="NomeBeneficiario" name="NomeBeneficiario" placeholder="Ex.: Maria" maxlength="50">
-                        </div>
-                        <div class="col-md-2" style="display: flex;align-items: center;justify-content: center;">
-                            <button type="button" class="btn btn-success">Incluir</button>
-                        </div>
+                            <div class="col-md-5">
+                                <input required="required" type="text" class="form-control" id="CpfBeneficiario" name="CpfBeneficiario" placeholder="Ex. 000.000.000-00" maxlength="14" />
+                            </div>
+                            <div class="col-md-5">
+                                <input required="required" type="text" class="form-control" id="NomeBeneficiario" name="NomeBeneficiario" placeholder="Ex.: Maria" maxlength="50">
+                            </div>
+                            <div class="col-md-2" style="display: flex;align-items: center;justify-content: center;">
+                                <button type="submit" class="btn btn-success">Incluir</button>
+                            </div>
                     </div>
 
                     <div class="row" style="margin-top: 20px;">
                         <div class="col-md-4">
-                            <label for="CpfBeneficiario">CPF:</label>
+                            <label for="">CPF:</label>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="NomeBeneficiario">Nome:</label>
+                                <label for="">Nome:</label>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-group">
-                                <label for="NomeBeneficiario">Ações:</label>
+                                <label for="">Ações:</label>
                             </div>
                         </div>
                     </div>
 
                     <hr />
 
-                    <div>
+                    <div id="listBeneficiarios">
 
                     </div>
-                </div>
+                </form>
             </div>
         </div>
     </div>
-</form>
+</div>

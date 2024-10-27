@@ -7,6 +7,7 @@ using System.Web;
 using System.Web.Mvc;
 using FI.AtividadeEntrevista.DML;
 using FI.WebAtividadeEntrevista.Service;
+using FI.WebAtividadeEntrevista.Models;
 
 namespace WebAtividadeEntrevista.Controllers
 {
@@ -56,6 +57,31 @@ namespace WebAtividadeEntrevista.Controllers
 
                 Response.StatusCode = 400;
                 return Json(string.Join(Environment.NewLine, erro));
+            }
+
+            foreach(BeneficiarioModel beneficiario in model.Beneficiarios)
+            {
+                var cpfBeneficiarioFormatado = FormatadorService.FormataCpf(beneficiario.Cpf);
+
+                if (cpfBeneficiarioFormatado.Equals(cpfFormatado))
+                {
+                    List<string> erro = new List<string>();
+                    erro.Add("O cpf dos beneficiarios não podem ser iguial aos do cliente.");
+
+                    Response.StatusCode = 400;
+                    return Json(string.Join(Environment.NewLine, erro));
+                }
+
+                if (!FormatadorService.ValidaCPF(cpfBeneficiarioFormatado))
+                {
+                    List<string> erro = new List<string>();
+                    erro.Add($"CPF do beneficiario {beneficiario.Nome} inválido.");
+
+                    Response.StatusCode = 400;
+                    return Json(string.Join(Environment.NewLine, erro));
+                }
+
+                beneficiario.Cpf = cpfBeneficiarioFormatado;
             }
 
             model.Id = bo.Incluir(new Cliente()

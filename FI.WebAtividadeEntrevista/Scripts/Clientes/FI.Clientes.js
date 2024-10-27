@@ -1,5 +1,22 @@
-﻿
+﻿let beneficiarios = [];
+
 $(document).ready(function () {
+
+    $('#formBeneficiarios').submit(function (e) {
+        e.preventDefault();
+
+        const nome = $(this).find("#NomeBeneficiario").val();
+        const cpf = $(this).find("#CpfBeneficiario").val();
+
+        beneficiarios.push({
+            nome: nome,
+            cpf: cpf
+        });
+
+        adicionarBeneficiario(nome, cpf);
+    })
+
+
     $('#formCadastro').submit(function (e) {
         e.preventDefault();
         $.ajax({
@@ -15,7 +32,8 @@ $(document).ready(function () {
                 "Cidade": $(this).find("#Cidade").val(),
                 "Logradouro": $(this).find("#Logradouro").val(),
                 "Telefone": $(this).find("#Telefone").val(),
-                "Cpf": $(this).find("#Cpf").val()
+                "Cpf": $(this).find("#Cpf").val(),
+                "Beneficiarios": beneficiarios
             },
             error:
             function (r) {
@@ -32,9 +50,14 @@ $(document).ready(function () {
         });
     })
 
+
     $("#Cpf").on('keydown paste', function () {
-        mascararCpf(this)
+        mascararCpf(this);
     });
+
+    $("#CpfBeneficiario").on('keydown', function () {
+        mascararCpf(this);
+    })
 
     $("#btnBeneficiario").on('click', function () {
         $("#modalBeneficiarios").css({
@@ -90,3 +113,40 @@ function mascararCpf(campo) {
         campo.value = valor.slice(0, 3) + '.' + valor.slice(3, 6) + '.' + valor.slice(6, 9) + '-' + valor.slice(9);
     }
 }  
+
+
+function adicionarBeneficiario(nome, cpf) {
+    const index = beneficiarios.length - 1;
+    
+    $('#listBeneficiarios').append(`
+        <div class='row'>
+            <div class="col-md-4">
+                ${cpf}
+            </div>
+            <div class="col-md-4">
+                ${nome}    
+            </div>
+            <div class="col-md-4" style='margin-top: 5px;'>
+                <button type="button" class="btn btn-info" onclick="alterarBeneficiario(${index})">Alterar</button>
+                <button type="button" class="btn btn-info" onclick="removerBeneficiario(${index})">Excluir</button>
+            </div>
+        </div>
+        <hr />
+    `)
+}
+
+function alterarBeneficiario(index) {
+    console.log('aaaaaaaaaaaaaaaaaaaa')
+}
+
+function removerBeneficiario(index) {
+    beneficiarios.splice(index, index + 1);
+
+    $('#listBeneficiarios').empty();
+    beneficiarios.forEach((e, index) => {
+        adicionarBeneficiario(e.nome, e.cpf);
+    })
+    
+
+    console.log(beneficiarios);
+}

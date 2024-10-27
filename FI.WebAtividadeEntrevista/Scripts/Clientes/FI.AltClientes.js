@@ -1,4 +1,4 @@
-﻿
+﻿let beneficiarios = [];
 $(document).ready(function () {
     if (obj) {
         $('#formCadastro #Nome').val(obj.Nome);
@@ -12,6 +12,20 @@ $(document).ready(function () {
         $('#formCadastro #Telefone').val(obj.Telefone);
         $('#formCadastro #Cpf').val(obj.Cpf);
     }
+
+    $('#formBeneficiarios').submit(function (e) {
+        e.preventDefault();
+
+        const nome = $(this).find("#NomeBeneficiario").val();
+        const cpf = $(this).find("#CpfBeneficiario").val();
+
+        beneficiarios.push({
+            nome: nome,
+            cpf: cpf
+        });
+
+        adicionarBeneficiario(nome, cpf);
+    })
 
     $('#formCadastro').submit(function (e) {
         e.preventDefault();
@@ -50,6 +64,22 @@ $(document).ready(function () {
     $("#Cpf").on('keydown paste', function () {
         mascararCpf(this)
     });
+
+    $("#CpfBeneficiario").on('keydown', function () {
+        mascararCpf(this);
+    })
+
+    $("#btnBeneficiario").on('click', function () {
+        $("#modalBeneficiarios").css({
+            "display": "block"
+        });
+    });
+
+    $('#btnFecharModal').on('click', function () {
+        $("#modalBeneficiarios").css({
+            "display": "none"
+        });
+    })
 })
 
 function ModalDialog(titulo, texto) {
@@ -94,3 +124,22 @@ function mascararCpf(campo) {
         campo.value = valor.slice(0, 3) + '.' + valor.slice(3, 6) + '.' + valor.slice(6, 9) + '-' + valor.slice(9);
     }
 } 
+
+
+function adicionarBeneficiario(nome, cpf) {
+    $('#listBeneficiarios').append(`
+        <div class='row'>
+            <div class="col-md-4">
+                ${cpf}
+            </div>
+            <div class="col-md-4">
+                ${nome}    
+            </div>
+            <div class="col-md-4" style='margin-top: 5px;'>
+                <button type="button" class="btn btn-info">Alterar</button>
+                <button type="button" class="btn btn-info">Excluir</button>
+            </div>
+        </div>
+        <hr />
+    `)
+}
