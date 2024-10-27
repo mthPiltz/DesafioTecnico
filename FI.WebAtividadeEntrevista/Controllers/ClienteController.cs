@@ -160,13 +160,24 @@ namespace WebAtividadeEntrevista.Controllers
         [HttpGet]
         public ActionResult Alterar(long id)
         {
-            BoCliente bo = new BoCliente();
-            Cliente cliente = bo.Consultar(id);
+            BoCliente boCliente = new BoCliente();
+            BoBeneficiario boBeneficiario = new BoBeneficiario();
+            Cliente cliente = boCliente.Consultar(id);
+
             Models.ClienteModel model = null;
             var cpfMascarado = FormatadorService.MascararCPF(cliente.Cpf);
 
             if (cliente != null)
             {
+                List<Beneficiario> beneficiarios = boBeneficiario.ConsultarPorCliente(cliente.Id);
+                var beneficiarioModels = new List<BeneficiarioModel>();
+
+                foreach (Beneficiario beneficiario in beneficiarios)
+                {
+                    beneficiarioModels.Add(new BeneficiarioModel(
+                        beneficiario.Id, beneficiario.Nome, beneficiario.Cpf, beneficiario.IdCliente));
+                }
+
                 model = new ClienteModel()
                 {
                     Id = cliente.Id,
@@ -179,7 +190,8 @@ namespace WebAtividadeEntrevista.Controllers
                     Nome = cliente.Nome,
                     Sobrenome = cliente.Sobrenome,
                     Telefone = cliente.Telefone,
-                    Cpf = cpfMascarado
+                    Cpf = cpfMascarado,
+                    Beneficiarios = beneficiarioModels
                 };
 
             

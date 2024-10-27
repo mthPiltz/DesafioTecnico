@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FI.AtividadeEntrevista.DML
+﻿namespace FI.AtividadeEntrevista.DML
 {
     /// <summary>
     /// Classe de beneficiario que representa o registo na tabela Beneficiarios do Banco de Dados
@@ -33,6 +27,8 @@ namespace FI.AtividadeEntrevista.DML
             Cpf = cpf;
             Nome = nome;
         }
+
+        public Beneficiario() { }
 
         public Beneficiario(string cpf, string nome, long idCliente)
         {

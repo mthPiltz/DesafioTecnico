@@ -1,4 +1,6 @@
-﻿using System;
+﻿using FI.AtividadeEntrevista.BLL;
+using FI.AtividadeEntrevista.DML;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -22,6 +24,33 @@ namespace FI.AtividadeEntrevista.DAL
             if (ds.Tables[0].Rows.Count > 0)
                 long.TryParse(ds.Tables[0].Rows[0][0].ToString(), out ret);
             return ret;
+        }
+
+        internal List<Beneficiario> ConsultarPorCliente(long clienteid)
+        {
+            List<System.Data.SqlClient.SqlParameter> parametros = new List<System.Data.SqlClient.SqlParameter>();
+            parametros.Add(new System.Data.SqlClient.SqlParameter("Id_cliente", clienteid));
+
+            DataSet ds = base.Consultar("FI_SP_PesqBeneficiarioByCli", parametros);
+            return Converter(ds);
+        }
+
+        private List<Beneficiario> Converter(DataSet ds)
+        {
+            var beneficiarios = new List<Beneficiario>();
+            if (ds != null && ds.Tables != null && ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
+            {
+                foreach (DataRow row in ds.Tables[0].Rows)
+                {
+                    var beneficiario = new Beneficiario();
+                    beneficiario.Cpf = row.Field<string>("Cpf");
+                    beneficiario.Id = row.Field<long>("Id");
+                    beneficiario.Nome = row.Field<string>("Nome");
+                    beneficiarios.Add(beneficiario);
+                }
+            }
+
+            return beneficiarios;
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using FI.AtividadeEntrevista.DML;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -12,6 +13,12 @@ namespace FI.AtividadeEntrevista.BLL
         {
             DAL.DaoBeneficiarios ben = new DAL.DaoBeneficiarios();
             return ben.Incluir(beneficiario);
+        }
+
+        public List<DML.Beneficiario> ConsultarPorCliente(long clienteid)
+        {
+            DAL.DaoBeneficiarios ben = new DAL.DaoBeneficiarios();
+            return ben.ConsultarPorCliente(clienteid);
         }
     }
 }

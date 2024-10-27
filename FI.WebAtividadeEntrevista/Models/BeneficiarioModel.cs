@@ -31,6 +31,15 @@ namespace FI.WebAtividadeEntrevista.Models
         [Required]
         public long IdCliente { get; set; }
 
+        public BeneficiarioModel(long id, string nome, string cpf, long idCliente)
+        {
+            Id = id;
+            Nome = nome;
+            Cpf = cpf;
+            IdCliente = idCliente;
+        }
+
+        public BeneficiarioModel() { }
 
         public static implicit operator Beneficiario(BeneficiarioModel beneficiario)
         {
