@@ -31,9 +31,22 @@ $(document).ready(function () {
             }
         });
     })
+
     $("#Cpf").on('keydown paste', function () {
         mascararCpf(this)
     });
+
+    $("#btnBeneficiario").on('click', function () {
+        $("#modalBeneficiarios").css({
+            "display": "block"
+        });
+    });
+
+    $('#btnFecharModal').on('click', function () {
+        $("#modalBeneficiarios").css({
+            "display": "none"
+        });
+    })
 })
 
 function ModalDialog(titulo, texto) {
