@@ -27,5 +27,18 @@ namespace FI.AtividadeEntrevista.DML
         /// IdCliente
         /// </summary>
         public long IdCliente { get; set; }
+
+        public Beneficiario(string cpf, string nome)
+        {
+            Cpf = cpf;
+            Nome = nome;
+        }
+
+        public Beneficiario(string cpf, string nome, long idCliente)
+        {
+            Cpf = cpf;
+            Nome = nome;
+            IdCliente = idCliente;
+        }
     }
 }

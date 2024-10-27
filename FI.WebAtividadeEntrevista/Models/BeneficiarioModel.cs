@@ -1,4 +1,6 @@
-﻿using System;
+﻿using FI.AtividadeEntrevista.DML;
+using Microsoft.Ajax.Utilities;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -28,5 +30,11 @@ namespace FI.WebAtividadeEntrevista.Models
         /// </summary>
         [Required]
         public long IdCliente { get; set; }
+
+
+        public static implicit operator Beneficiario(BeneficiarioModel beneficiario)
+        {
+            return new Beneficiario(beneficiario.Cpf, beneficiario.Nome);
+        }
     }
 }
