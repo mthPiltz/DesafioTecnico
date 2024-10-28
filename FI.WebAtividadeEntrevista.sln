@@ -7,6 +7,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FI.WebAtividadeEntrevista",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FI.AtividadeEntrevista", "FI.AtividadeEntrevista\FI.AtividadeEntrevista.csproj", "{2B795BB7-A890-48FA-8F70-EF89F2E318D8}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ScriptSql", "ScriptSql", "{EDBE9A88-4EB8-4823-B653-4DD1AA9590DF}"
+	ProjectSection(SolutionItems) = preProject
+		Script.sql = Script.sql
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
