@@ -39,10 +39,24 @@ namespace FI.AtividadeEntrevista.BLL
             return ben.VerificarExistencia(id);
         }
 
+        /// <summary>
+        /// Altera um beneficiario
+        /// </summary>
+        /// <param name="beneficiario">Objeto de beneficiario</param>
         public void Alterar(Beneficiario beneficiario)
         {
             DAL.DaoBeneficiarios ben = new DAL.DaoBeneficiarios();
             ben.Alterar(beneficiario);
+        }
+
+        /// <summary>
+        /// Exclui um beneficiario
+        /// </summary>
+        /// <param name="id">Id de um beneficiario</param>
+        public void Excluir(long id)
+        {
+            DAL.DaoBeneficiarios ben = new DAL.DaoBeneficiarios();
+            ben.Excluir(id);
         }
     }
 }

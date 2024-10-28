@@ -140,6 +140,16 @@ namespace WebAtividadeEntrevista.Controllers
                 return Json(string.Join(Environment.NewLine, erro));
             }
 
+            List<Beneficiario> listBeneficiarios = boBeneficiario.ConsultarPorCliente(model.Id);
+            var excluir = listBeneficiarios
+                                    .Where(b => !model.Beneficiarios.Any(mb => mb.Id == b.Id))
+                                    .ToList();
+
+            foreach(Beneficiario beneficiario in excluir)
+            {
+                boBeneficiario.Excluir(beneficiario.Id);
+            }
+
             foreach (BeneficiarioModel beneficiario in model.Beneficiarios)
             {
                 var cpfBeneficiarioFormatado = FormatadorService.FormataCpf(beneficiario.Cpf);
