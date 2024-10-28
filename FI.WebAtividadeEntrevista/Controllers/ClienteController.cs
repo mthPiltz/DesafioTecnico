@@ -116,8 +116,9 @@ namespace WebAtividadeEntrevista.Controllers
         [HttpPost]
         public JsonResult Alterar(ClienteModel model)
         {
-            BoCliente bo = new BoCliente();
-       
+            BoCliente boCliente = new BoCliente();
+            BoBeneficiario boBeneficiario = new BoBeneficiario();
+
             if (!this.ModelState.IsValid)
             {
                 List<string> erros = (from item in ModelState.Values
@@ -139,7 +140,41 @@ namespace WebAtividadeEntrevista.Controllers
                 return Json(string.Join(Environment.NewLine, erro));
             }
 
-            bo.Alterar(new Cliente()
+            foreach (BeneficiarioModel beneficiario in model.Beneficiarios)
+            {
+                var cpfBeneficiarioFormatado = FormatadorService.FormataCpf(beneficiario.Cpf);
+
+                if (cpfBeneficiarioFormatado.Equals(cpfFormatado))
+                {
+                    List<string> erro = new List<string>();
+                    erro.Add("O cpf dos beneficiarios não podem ser iguial aos do cliente.");
+
+                    Response.StatusCode = 400;
+                    return Json(string.Join(Environment.NewLine, erro));
+                }
+
+                if (!FormatadorService.ValidaCPF(cpfBeneficiarioFormatado))
+                {
+                    List<string> erro = new List<string>();
+                    erro.Add($"CPF do beneficiario {beneficiario.Nome} inválido.");
+
+                    Response.StatusCode = 400;
+                    return Json(string.Join(Environment.NewLine, erro));
+                }
+
+                beneficiario.Cpf = cpfBeneficiarioFormatado;
+
+                if (boBeneficiario.VerificarExistencia(beneficiario.Id))
+                {
+                    boBeneficiario.Alterar(new Beneficiario(beneficiario.Cpf, beneficiario.Nome, beneficiario.Id, model.Id));
+                }
+                else
+                {
+                    boBeneficiario.Incluir(new Beneficiario(beneficiario.Cpf, beneficiario.Nome, model.Id));
+                }
+            }
+
+            boCliente.Alterar(new Cliente()
             {
                 Id = model.Id,
                 CEP = model.CEP,
@@ -175,7 +210,7 @@ namespace WebAtividadeEntrevista.Controllers
                 foreach (Beneficiario beneficiario in beneficiarios)
                 {
                     beneficiarioModels.Add(new BeneficiarioModel(
-                        beneficiario.Id, beneficiario.Nome, beneficiario.Cpf, beneficiario.IdCliente));
+                        beneficiario.Id, beneficiario.Nome, FormatadorService.MascararCPF(beneficiario.Cpf), beneficiario.IdCliente));
                 }
 
                 model = new ClienteModel()

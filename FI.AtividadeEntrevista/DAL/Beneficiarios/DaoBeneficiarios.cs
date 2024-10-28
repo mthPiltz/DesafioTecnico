@@ -26,6 +26,27 @@ namespace FI.AtividadeEntrevista.DAL
             return ret;
         }
 
+        internal void Alterar(DML.Beneficiario beneficiario)
+        {
+            List<System.Data.SqlClient.SqlParameter> parametros = new List<System.Data.SqlClient.SqlParameter>();
+
+            parametros.Add(new System.Data.SqlClient.SqlParameter("Nome", beneficiario.Nome));
+            parametros.Add(new System.Data.SqlClient.SqlParameter("Cpf", beneficiario.Cpf));
+            parametros.Add(new System.Data.SqlClient.SqlParameter("Id", beneficiario.Id));
+
+            base.Executar("FI_SP_AltBenef", parametros);
+        }
+
+        internal bool VerificarExistencia(long id)
+        {
+            List<System.Data.SqlClient.SqlParameter> parametros = new List<System.Data.SqlClient.SqlParameter>();
+
+            parametros.Add(new System.Data.SqlClient.SqlParameter("Id", id));
+            DataSet ds = base.Consultar("FI_SP_VerificaBeneficiarioExiste", parametros);
+
+            return ds.Tables[0].Rows.Count > 0;
+        }
+
         internal List<Beneficiario> ConsultarPorCliente(long clienteid)
         {
             List<System.Data.SqlClient.SqlParameter> parametros = new List<System.Data.SqlClient.SqlParameter>();

@@ -36,5 +36,13 @@
             Nome = nome;
             IdCliente = idCliente;
         }
+
+        public Beneficiario(string cpf, string nome, long id, long idCliente)
+        {
+            Id = id;
+            Nome = nome;
+            Cpf = cpf;
+            IdCliente = idCliente;
+        }
     }
 }

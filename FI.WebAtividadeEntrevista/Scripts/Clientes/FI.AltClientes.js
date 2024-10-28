@@ -13,18 +13,47 @@ $(document).ready(function () {
         $('#formCadastro #Cpf').val(obj.Cpf);
     }
 
+    if (obj.Beneficiarios.length > 0) {
+
+        obj.Beneficiarios.forEach(e => {
+            beneficiarios.push({
+                nome: e.Nome,
+                cpf: e.Cpf,
+                id: e.Id
+            });
+            adicionarBeneficiario(e.Nome, e.Cpf);
+        })
+    }
+    
+
     $('#formBeneficiarios').submit(function (e) {
         e.preventDefault();
 
         const nome = $(this).find("#NomeBeneficiario").val();
         const cpf = $(this).find("#CpfBeneficiario").val();
+        const index = estaNalista(cpf)
 
-        beneficiarios.push({
-            nome: nome,
-            cpf: cpf
-        });
+        if (index > -1) {
+            const id = beneficiarios[index].id;
 
-        adicionarBeneficiario(nome, cpf);
+            beneficiarios[index] = {
+                nome: nome,
+                cpf: cpf,
+                id: id
+            }
+            gerarLista();
+        }
+        else {
+            beneficiarios.push({
+                nome: nome,
+                cpf: cpf,
+                id: -1
+            });
+            adicionarBeneficiario(nome, cpf);
+        }
+
+        $(this).find("#NomeBeneficiario").val('');
+        $(this).find("#CpfBeneficiario").val('');
     })
 
     $('#formCadastro').submit(function (e) {
@@ -43,7 +72,8 @@ $(document).ready(function () {
                 "Cidade": $(this).find("#Cidade").val(),
                 "Logradouro": $(this).find("#Logradouro").val(),
                 "Telefone": $(this).find("#Telefone").val(),
-                "CPF": $(this).find("#Cpf").val()
+                "CPF": $(this).find("#Cpf").val(),
+                "Beneficiarios": beneficiarios
             },
             error:
             function (r) {
@@ -127,6 +157,8 @@ function mascararCpf(campo) {
 
 
 function adicionarBeneficiario(nome, cpf) {
+    const index = beneficiarios.length - 1;
+
     $('#listBeneficiarios').append(`
         <div class='row'>
             <div class="col-md-4">
@@ -136,10 +168,38 @@ function adicionarBeneficiario(nome, cpf) {
                 ${nome}    
             </div>
             <div class="col-md-4" style='margin-top: 5px;'>
-                <button type="button" class="btn btn-info">Alterar</button>
-                <button type="button" class="btn btn-info">Excluir</button>
+                <button type="button" class="btn btn-info" onclick="alterarBeneficiario(${index})">Alterar</button>
+                <button type="button" class="btn btn-info" onclick="removerBeneficiario(${index})">Excluir</button>
             </div>
         </div>
         <hr />
     `)
+}
+
+function removerBeneficiario(index) {
+    beneficiarios.splice(index, index + 1);
+
+    gerarLista();
+}
+
+function estaNalista(cpf) {
+    let i = -1;
+    beneficiarios.forEach((e, index) => {
+        if (e.cpf == cpf)
+            i = index;
+    });
+
+    return i;
+}
+
+function gerarLista() {
+    $('#listBeneficiarios').empty();
+    beneficiarios.forEach((e) => {
+        adicionarBeneficiario(e.nome, e.cpf);
+    })
+}
+
+function alterarBeneficiario(index) {
+    $('#formBeneficiarios').find("#NomeBeneficiario").val(beneficiarios[index].nome);
+    $('#formBeneficiarios').find("#CpfBeneficiario").val(beneficiarios[index].cpf);
 }

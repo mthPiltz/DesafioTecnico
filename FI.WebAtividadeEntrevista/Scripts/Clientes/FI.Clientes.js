@@ -7,13 +7,25 @@ $(document).ready(function () {
 
         const nome = $(this).find("#NomeBeneficiario").val();
         const cpf = $(this).find("#CpfBeneficiario").val();
+        const index = estaNalista(cpf)
 
-        beneficiarios.push({
-            nome: nome,
-            cpf: cpf
-        });
+        if (index > -1) {
+            beneficiarios[index] = {
+                nome: nome,
+                cpf: cpf
+            }
+            gerarLista();
+        }
+        else {
+            beneficiarios.push({
+                nome: nome,
+                cpf: cpf
+            });
+            adicionarBeneficiario(nome, cpf);
+        }
 
-        adicionarBeneficiario(nome, cpf);
+        $(this).find("#NomeBeneficiario").val('');
+        $(this).find("#CpfBeneficiario").val('');
     })
 
 
@@ -114,6 +126,16 @@ function mascararCpf(campo) {
     }
 }  
 
+function estaNalista(cpf) {
+    let i = -1;
+    beneficiarios.forEach((e, index) => {
+        if (e.cpf == cpf)
+            i = index;
+    });
+
+    return i;
+}
+
 
 function adicionarBeneficiario(nome, cpf) {
     const index = beneficiarios.length - 1;
@@ -136,17 +158,22 @@ function adicionarBeneficiario(nome, cpf) {
 }
 
 function alterarBeneficiario(index) {
-    console.log('aaaaaaaaaaaaaaaaaaaa')
+    $('#formBeneficiarios').find("#NomeBeneficiario").val(beneficiarios[index].nome);
+    $('#formBeneficiarios').find("#CpfBeneficiario").val(beneficiarios[index].cpf);
 }
 
 function removerBeneficiario(index) {
     beneficiarios.splice(index, index + 1);
 
     $('#listBeneficiarios').empty();
-    beneficiarios.forEach((e, index) => {
+    beneficiarios.forEach((e) => {
         adicionarBeneficiario(e.nome, e.cpf);
     })
-    
+}
 
-    console.log(beneficiarios);
+function gerarLista() {
+    $('#listBeneficiarios').empty();
+    beneficiarios.forEach((e) => {
+        adicionarBeneficiario(e.nome, e.cpf);
+    })
 }
